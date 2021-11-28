@@ -1,0 +1,19 @@
+{
+  "name": "day0",
+  "version": "1.0.0",
+  "description": "Advent of Code",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && npx eslint src/index.ts && node dist/index.js"
+  },
+  "author": "CJ",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^4.1.2",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "@types/node": "^14.14.10",
+    "eslint": "^7.14.0"
+  }
+}

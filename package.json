@@ -2,11 +2,13 @@
     "name": "day0",
     "version": "1.0.0",
     "description": "Advent of Code",
-    "main": "index.js",
+    "main": "app.js",
     "scripts": {
-        "start": "npm run lint && npm run typescript",
+        "build": "npx tsc --project ./",
+        "start": "npm run build && node dist/src/app.js",
         "lint": "eslint . --ext .ts",
-        "typescript": "tsc && node dist/index.js"
+        "typescript": "tsc",
+        "new": "./new.sh"
     },
     "author": "CJ",
     "license": "ISC",

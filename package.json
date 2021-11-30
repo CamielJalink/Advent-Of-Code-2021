@@ -7,7 +7,8 @@
         "build": "npx tsc --project ./",
         "start": "npm run build && node dist/src/app.js",
         "lint": "eslint . --ext .ts",
-        "typescript": "tsc"
+        "typescript": "tsc",
+        "new": "./new.sh"
     },
     "author": "CJ",
     "license": "ISC",

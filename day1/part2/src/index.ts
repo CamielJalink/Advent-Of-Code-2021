@@ -13,11 +13,14 @@ function determineChange(depthsList: number[]) {
     let staysSame = 0;
 
     for (let i = 1; i < depthsList.length; i++) {
-        if (depthsList[i] > depthsList[i - 1]) {
+        const slope1 = depthsList[i - 1] + depthsList[i] + depthsList[i + 1];
+        const slope2 = depthsList[i] + depthsList[i + 1] + depthsList[i + 2];
+
+        if (slope2 > slope1) {
             increaseCount++;
-        } else if (depthsList[i] < depthsList[i - 1]) {
+        } else if (slope2 < slope1) {
             decreaseCount++;
-        } else if (depthsList[i] === depthsList[i - 1]) {
+        } else if (slope2 === slope1) {
             staysSame++;
         }
     }

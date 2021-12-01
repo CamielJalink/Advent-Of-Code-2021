@@ -1,7 +1,20 @@
 import { readFileSync } from "fs";
 
-function getStringInput() {
-    return readFileSync("input/0.txt", "utf-8");
+export function getNumberArray() {
+    const input = readFileSync("input/1.txt", "utf-8");
+    const numberStrings = input.split("\n");
+    return numberStrings.map((string) => parseInt(string));
 }
 
-export const part1 = getStringInput();
+export function getIncreases(numbers: number[]) {
+    let increases = 0;
+    numbers.forEach((string, i) => {
+        if (i > 0 && string > numbers[i - 1]) {
+            increases++;
+        }
+    });
+
+    return increases;
+}
+
+export const part1 = getIncreases(getNumberArray());

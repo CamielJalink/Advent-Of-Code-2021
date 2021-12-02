@@ -15,17 +15,19 @@ function advent() {
 function moveSub(movesArray: string[][]) {
     let xPos = 0;
     let depth = 0;
+    let aim = 0;
 
     movesArray.forEach((move) => {
         switch (move[0]) {
             case "forward":
                 xPos += Number(move[1]);
+                depth += aim * Number(move[1]);
                 break;
             case "down":
-                depth += Number(move[1]);
+                aim += Number(move[1]);
                 break;
             case "up":
-                depth -= Number(move[1]);
+                aim -= Number(move[1]);
                 break;
             default:
                 console.error("Something is wrong with my input!");

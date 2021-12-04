@@ -19,17 +19,17 @@ function playBingo(input: string[]) {
         bingoBoard.playBingo();
     });
 
-    // Check which bingoBoard finished first. That boards score is the winning score!
-    let fastestWin = chosenNumbers.length;
-    let winningScore;
+    // Check which bingoBoard finished last. That boards score is the puzzel output!
+    let slowestWin = 0;
+    let losingScore;
     bingoBoards.forEach((bingoBoard) => {
-        if (bingoBoard.winningTurn < fastestWin) {
-            fastestWin = bingoBoard.winningTurn;
-            winningScore = bingoBoard.score;
+        if (bingoBoard.winningTurn > slowestWin) {
+            slowestWin = bingoBoard.winningTurn;
+            losingScore = bingoBoard.score;
         }
     });
 
-    console.log(`The highest score found is: ${winningScore}`);
+    console.log(`The highest score found is: ${losingScore}`);
 }
 
 advent();

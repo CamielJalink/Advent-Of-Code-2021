@@ -12,30 +12,23 @@ function countLeastFuel(crabLocations: number[]) {
 
     let fuelNeeded = 0;
     crabLocations.forEach((crabLoc) => {
-        fuelNeeded += Math.abs(crabLoc - gatherLoc);
+        const distance = Math.abs(crabLoc - gatherLoc);
+        for (let i = 1; i <= distance; i++) {
+            fuelNeeded += i;
+        }
     });
 
     console.log(fuelNeeded);
 }
 
 function determineLocation(crabLocations: number[]) {
-    crabLocations.sort((locA, locB) => {
-        return locA - locB;
+    let sum = 0;
+    crabLocations.forEach((loc) => {
+        sum += loc;
     });
-    let medianLoc: number;
 
-    // median is middle crab
-    if (crabLocations.length % 2 === 1) {
-        medianLoc = crabLocations[Math.floor(crabLocations.length / 2)];
-    }
-    // median is average of middle two crabs.
-    else {
-        const loc1 = crabLocations[Math.floor(crabLocations.length / 2) - 1];
-        const loc2 = crabLocations[Math.floor(crabLocations.length / 2)];
-        medianLoc = (loc1 + loc2) / 2;
-    }
-
-    return medianLoc;
+    const averageLoc = Math.round(sum / crabLocations.length) - 1; // What is this -1?!
+    return averageLoc;
 }
 
 advent();

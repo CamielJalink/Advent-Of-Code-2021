@@ -26,8 +26,7 @@ Gegeven deze eerste regel:
 - En dan blijft over:
 - FABCD is dan de 2.
 
-- cbdgef fgaecd agebfd blijven over v
-oor de getallen 0, 6, 9
+- cbdgef fgaecd agebfd blijven over voor de getallen 0, 6, 9
 
 - De 6 bevat niet de rechterlijn die de 0 wel bevat. Dus bevat NIET BE.
 - FGAECD is de 6.
@@ -46,3 +45,4 @@ Nu weet ik welke letter-codes bij welk cijfer hoort, en kan ik het cijfer voor d
 
 fdgacbe cefdb cefbgd gcbe
 8         3      9     4
+

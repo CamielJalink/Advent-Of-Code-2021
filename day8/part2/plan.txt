@@ -1,0 +1,48 @@
+// Voor elke regel:
+- Een array van 10 objecten, 1 voor elk getal 0 t/m 9.
+- Elk object houdt zijn eigen 'segments' bij, ofwel lijnen.
+- Elk object houdt zijn eigen 'signals' bij, ofwel de letters a t/m g die hij krijgt.
+- Elk object probeert te inferren welk segment hoort bij welke signal.
+
+
+be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
+
+
+Gegeven deze eerste regel:
+
+- be is de 1.         B en E zijn dus de rechter twee strepen.
+- edb is dus de 7.    De letter D betekent dus voor al deze getallen het bovenste streepje!
+- cgeb is dus de 4.   C en G zijn dus de linksboven verticale, en de middelste horizontale streep. 
+
+- fdcge fecdb fabcd zijn (nog niet duidelijk welke): 2,3 en 5.
+
+- maaarrrrr hiervan is 5 de ENIGE met linksboven een streepje!
+- Dus 5 moet zijn: de gene met ZOWEL de C als de G die in de 4 voorkomen: 
+- FDCGE is de 5.
+
+- De 3 is de enige van de lengt-5-digits die de 1 bevat. De 3 moet dus zijn: 
+- FECDB is de 3.
+
+- En dan blijft over:
+- FABCD is dan de 2.
+
+- cbdgef fgaecd agebfd blijven over v
+oor de getallen 0, 6, 9
+
+- De 6 bevat niet de rechterlijn die de 0 wel bevat. Dus bevat NIET BE.
+- FGAECD is de 6.
+
+- de 9 bevat de 3. De 0 bevat niet de 3.
+- cbdgef  is de 9
+
+- De laatste van de lengte 6 digets is de 0: 
+- agebfd is de 0
+
+De enige met lengte 7 is dus de 8: CFBEGAD
+
+-------
+
+Nu weet ik welke letter-codes bij welk cijfer hoort, en kan ik het cijfer voor deze regel opschrijven!
+
+fdgacbe cefdb cefbgd gcbe
+8         3      9     4

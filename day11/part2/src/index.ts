@@ -9,16 +9,18 @@ function advent() {
 
 function countFlashes(input: string[]) {
     const octopi: Octopus[] = initOctopi(input);
-    const numSteps = 100;
-    let numFlashes = 0;
-    for (let i = 0; i < numSteps; i++) {
-        numFlashes += countFlashesNextStep(octopi);
+    const numSteps = 1000;
+    let totalFlashStep = -1;
+    for (let i = 1; i <= numSteps; i++) {
+        if (countFlashesNextStep(octopi)) {
+            totalFlashStep = i;
+            break;
+        }
     }
-    return numFlashes;
+    return totalFlashStep;
 }
 
 function countFlashesNextStep(octopi: Octopus[]) {
-    let numFlashes = 0;
     // First, add 1 to the charge of each octopus for the day.
     octopi.forEach((octopus: Octopus) => {
         octopus.charge++;
@@ -31,7 +33,6 @@ function countFlashesNextStep(octopi: Octopus[]) {
 
         octopi.forEach((octopus: Octopus) => {
             if (octopus.charge > 9) {
-                numFlashes++;
                 octopus.charge = 0;
                 stillFlashing = true;
                 octopus.neighbors.forEach((nb: Octopus) => {
@@ -42,8 +43,15 @@ function countFlashesNextStep(octopi: Octopus[]) {
             }
         });
     }
+    let areAllFlashing = true;
 
-    return numFlashes;
+    octopi.forEach((octopus: Octopus) => {
+        if (octopus.charge !== 0) {
+            areAllFlashing = false;
+        }
+    });
+
+    return areAllFlashing;
 }
 
 function initOctopi(input: string[]) {

@@ -10,13 +10,55 @@ function buildPolymer(input: string[]) {
     let build = fillInitialMap(input[0]);
     const rules: string[][] = parseRules(input[1]);
 
-    // For part 1, we only loop 10 days.
-    for (let day = 0; day < 40; day++) {
+    for (let day = 0; day < 10; day++) {
         build = applyRules(build, rules);
-        build.forEach((value: bigint, key: string) => {
-            console.log(key + String(value));
-        });
     }
+    return determineOuput(build);
+}
+
+function determineOuput(build: Map<string, bigint>) {
+    const amountOfLettersFirst = new Map<string, bigint>();
+    const amountOfLettersLast = new Map<string, bigint>();
+    const amountOfLetters = new Map<string, bigint>();
+
+    build.forEach((value: bigint, key: string) => {
+        const letterValue1: bigint = amountOfLettersFirst.get(key[0]) || BigInt(0);
+        const newValue = letterValue1 + value;
+        amountOfLettersFirst.set(key[0], newValue);
+
+        const letterValue2: bigint = amountOfLettersLast.get(key[1]) || BigInt(0);
+        const newValue2 = letterValue2 + value;
+        amountOfLettersLast.set(key[1], newValue2);
+    });
+
+    amountOfLettersFirst.forEach((value: bigint, key: string) => {
+        const lastValue: bigint = amountOfLettersLast.get(key) || BigInt(0);
+        if (value > lastValue) {
+            amountOfLetters.set(key, value);
+        } else {
+            amountOfLetters.set(key, lastValue);
+        }
+    });
+
+    let mostOccurringAmount = BigInt(0);
+    let leastOccurringAmount = BigInt(-1);
+
+    amountOfLetters.forEach((value: bigint) => {
+        if (value > mostOccurringAmount) {
+            mostOccurringAmount = value;
+        }
+        if (leastOccurringAmount === BigInt(-1) || value < leastOccurringAmount) {
+            leastOccurringAmount = value;
+        }
+    });
+
+    // Part 1 code zegt dat het dit moe tzijn voor 10 loops:
+    // 3573
+    // 515;
+    // 3058;
+    console.log(mostOccurringAmount);
+    console.log(leastOccurringAmount);
+    return mostOccurringAmount - leastOccurringAmount;
 }
 
 function applyRules(build: Map<string, bigint>, rules: string[][]) {

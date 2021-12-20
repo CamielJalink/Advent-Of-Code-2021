@@ -7,62 +7,44 @@ function advent() {
 }
 
 function buildPolymer(input: string[]) {
-    let build = input[0];
+    let build = fillInitialMap(input[0]);
     const rules: string[][] = parseRules(input[1]);
 
     // For part 1, we only loop 10 days.
-    for (let day = 0; day < 10; day++) {
+    for (let day = 0; day < 40; day++) {
         build = applyRules(build, rules);
-    }
-
-    return determineOutput(build, rules);
-}
-
-// Not my proudest moment...
-function determineOutput(build: string, rules: string[][]) {
-    // Determine all the unique characters that can be found in the output.
-    const uniqueChars: string[] = [];
-    rules.forEach((rule: string[]) => {
-        const chars: string[] = [rule[0][0], rule[0][1], rule[1]];
-        for (let i = 0; i < chars.length; i++) {
-            if (!uniqueChars.includes(chars[i])) {
-                uniqueChars.push(chars[i]);
-            }
-        }
-    });
-
-    const charCounter: number[] = [];
-    for (let i = 0; i < uniqueChars.length; i++) {
-        charCounter.push(0);
-    }
-
-    for (let i = 0; i < build.length; i++) {
-        for (let j = 0; j < uniqueChars.length; j++) {
-            if (build[i] === uniqueChars[j]) {
-                charCounter[j]++;
-            }
-        }
-    }
-
-    const leastOccuring: number = Math.min(...charCounter);
-    const mostOccuring: number = Math.max(...charCounter);
-    return mostOccuring - leastOccuring;
-}
-
-function applyRules(build: string, rules: string[][]) {
-    let nextBuild = build;
-    for (let i = 1; i < build.length; i++) {
-        const compare: string = build[i - 1] + build[i];
-
-        rules.forEach((rule: string[]) => {
-            if (rule[0] === compare) {
-                // place rule[1] between the first and second character of rule[0]
-                nextBuild = nextBuild.replace(rule[0], rule[0][0] + rule[1] + rule[0][1]);
-            }
+        build.forEach((value: bigint, key: string) => {
+            console.log(key + String(value));
         });
     }
+}
 
-    return nextBuild;
+function applyRules(build: Map<string, bigint>, rules: string[][]) {
+    const newBuild: Map<string, bigint> = new Map();
+
+    // We'll fill a new map by mapping the current key's into new keys using the rules.
+    build.forEach((oldValue: bigint, key: string) => {
+        rules.forEach((rule: string[]) => {
+            if (key === rule[0]) {
+                const nextKey1: string = rule[0][0] + rule[1];
+                const nextKey2: string = rule[1] + rule[0][1];
+                // Other rules may result in the same keys, so check for their value before setting it
+                const value1 = newBuild.get(nextKey1) || BigInt(0);
+                const value2 = newBuild.get(nextKey2) || BigInt(0);
+                newBuild.set(nextKey1, value1 + BigInt(oldValue));
+                newBuild.set(nextKey2, value2 + BigInt(oldValue));
+            }
+        });
+    });
+    return newBuild;
+}
+
+function fillInitialMap(buildString: string) {
+    const build = new Map();
+    for (let i = 1; i < buildString.length; i++) {
+        build.set(buildString[i - 1] + buildString[i], 1);
+    }
+    return build;
 }
 
 function parseRules(input: string) {

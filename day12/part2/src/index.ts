@@ -23,22 +23,52 @@ function findAllPaths(input: string[]) {
             }
         }
 
-        nextCave.neighbors.forEach((cave: Cave) => {
-            if (cave.name === "end") {
-                validPaths.push([...nextPathToConsider, cave.name]);
-            }
-            // If the next cave is a small cave, but isn't on the current path yet, add it.
-            else if (!nextPathToConsider.includes(cave.name) && cave.isSmall) {
-                queue.push([...nextPathToConsider, cave.name]);
-            }
-            // if the next cave is a large cave, then it doesn't matter if we've been there yet!
-            else if (!cave.isSmall) {
-                queue.push([...nextPathToConsider, cave.name]);
-            }
-        });
+        const smallCaveTwice = checkDuplicateSmallCaves(nextPathToConsider);
+
+        if (smallCaveTwice) {
+            nextCave.neighbors.forEach((cave: Cave) => {
+                if (cave.name === "end") {
+                    validPaths.push([...nextPathToConsider, cave.name]);
+                }
+                // If the next cave is a small cave, but isn't on the current path yet, add it.
+                else if (!nextPathToConsider.includes(cave.name) && cave.isSmall) {
+                    queue.push([...nextPathToConsider, cave.name]);
+                }
+                // if the next cave is a large cave, then it doesn't matter if we've been there yet!
+                else if (!cave.isSmall) {
+                    queue.push([...nextPathToConsider, cave.name]);
+                }
+            });
+        } else {
+            nextCave.neighbors.forEach((cave: Cave) => {
+                if (cave.name === "end") {
+                    validPaths.push([...nextPathToConsider, cave.name]);
+                }
+                // if the next cave is a large cave, then it doesn't matter if we've been there yet!
+                else if (cave.name !== "start") {
+                    queue.push([...nextPathToConsider, cave.name]);
+                }
+            });
+        }
     }
 
     return validPaths.length;
+}
+
+function checkDuplicateSmallCaves(nextPathToConsider: string[]) {
+    const nextPathCopy: string[] = JSON.parse(JSON.stringify(nextPathToConsider));
+    nextPathCopy.sort();
+
+    let smallCaveTwice = false;
+    for (let i = 1; i < nextPathCopy.length; i++) {
+        if (nextPathCopy[i].toLowerCase() === nextPathCopy[i]) {
+            if (nextPathCopy[i] === nextPathCopy[i - 1]) {
+                smallCaveTwice = true;
+            }
+        }
+    }
+
+    return smallCaveTwice;
 }
 
 advent();

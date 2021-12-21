@@ -1,42 +1,66 @@
 import { readFileSync } from "fs";
-import Location from "./location";
+import { Location, Path, parseInput } from "./location";
 
 function advent() {
     const stringInput = readFileSync("input.txt", "utf-8");
     const input = stringInput.split("\r\n");
-    console.log(determineLowestRisk(input));
+    determineLowestRisk(input);
 }
 
 function determineLowestRisk(input: string[]) {
     const locations: Location[] = parseInput(input);
-    locations[0].isStart = true;
-    locations[locations.length - 1].isExit = true;
+    const priorityQueue: Path[] = [];
+    const startPath: Path = {
+        nextLoc: locations[0],
+        sumRisk: 0,
+    };
 
-    return locations[0].findShortestPath();
-}
+    priorityQueue.push(startPath);
+    // We never want to go back to the starting location.
+    startPath.nextLoc.pathRiskFirstVisit = 0;
 
-function parseInput(input: string[]) {
-    const locations: Location[] = [];
+    let shortestPathFound = false;
+    while (!shortestPathFound) {
+        // eslint-disable-next-line
+        const nextPath = priorityQueue.shift()!;
 
-    // Build an array of all locations
-    for (let y = 0; y < input.length; y++) {
-        for (let x = 0; x < input[0].length; x++) {
-            locations.push(new Location(x, y, parseInt(input[y][x])));
-        }
-    }
+        nextPath.nextLoc.neighbors.forEach((loc: Location) => {
+            // If one of the neighbors is our endpoint, then we must have found the shortest path!
+            if (loc.isExit) {
+                console.log(`Found the shortest path, it's risk is: ${nextPath.sumRisk + loc.riskLevel}`);
+                shortestPathFound = true;
+            }
 
-    // Map neighbors for each location!
-    locations.forEach((loc: Location) => {
-        locations.forEach((loc2: Location) => {
-            if (Math.abs(loc.x - loc2.x) === 1 && Math.abs(loc.y - loc2.y) === 0) {
-                loc.neighbors.push(loc2);
-            } else if (Math.abs(loc.x - loc2.x) === 0 && Math.abs(loc.y - loc2.y) === 1) {
-                loc.neighbors.push(loc2);
+            // this new location is only of interest if we haven't been here on a less risky path before.
+            const pathRisk = nextPath.sumRisk + loc.riskLevel;
+            if (loc.pathRiskFirstVisit === -1 || loc.pathRiskFirstVisit > pathRisk) {
+                loc.pathRiskFirstVisit = pathRisk;
+                // Insert the new path into the queue.
+                insertIntoQueue(priorityQueue, loc, pathRisk);
             }
         });
-    });
+    }
+}
 
-    return locations;
+function insertIntoQueue(priorityQueue: Path[], loc: Location, pathRisk: number) {
+    const nextPath: Path = { nextLoc: loc, sumRisk: pathRisk };
+
+    if (priorityQueue.length === 0) {
+        priorityQueue.push(nextPath);
+    } else {
+        let pathInserted = false;
+        for (let i = 0; i < priorityQueue.length; i++) {
+            if (priorityQueue[i].sumRisk >= pathRisk) {
+                priorityQueue.splice(i, 0, nextPath);
+                pathInserted = true;
+                break;
+            }
+        }
+        // if the path wasn't inserted succesfully, it must be the path with the highest risk so far.
+        if (!pathInserted) {
+            priorityQueue.push(nextPath);
+        }
+    }
 }
 
 advent();

@@ -1,26 +1,46 @@
-export default class Location {
+export class Location {
+    name: string;
     x: number;
     y: number;
     riskLevel: number;
+    pathRiskFirstVisit = -1;
     neighbors: Location[] = [];
-    isStart = false;
     isExit = false;
     constructor(x: number, y: number, riskLevel: number) {
         this.x = x;
         this.y = y;
         this.riskLevel = riskLevel;
+        this.name = x.toString() + "," + y.toString();
     }
+}
 
-    findShortestPath() {
-        if (this.isExit) {
-            return this.riskLevel;
-        } else {
-            // Bekijk welk van mijn neighbors het kortste pad heeft, en tel daar mijn riskLevel bij op.
-            // ...maaaaarrrr hoe voorkom ik loops!
-            // Een neighbor met hoog eigen risklevel kan toch het kortste pad zijn.
-            //
+export interface Path {
+    nextLoc: Location;
+    sumRisk: number;
+}
+
+export function parseInput(input: string[]) {
+    const locations: Location[] = [];
+
+    // Build an array of all locations
+    for (let y = 0; y < input.length; y++) {
+        for (let x = 0; x < input[0].length; x++) {
+            locations.push(new Location(x, y, parseInt(input[y][x])));
         }
-
-        return 0;
     }
+
+    // Map neighbors for each location!
+    locations.forEach((loc: Location) => {
+        locations.forEach((loc2: Location) => {
+            if (Math.abs(loc.x - loc2.x) === 1 && Math.abs(loc.y - loc2.y) === 0) {
+                loc.neighbors.push(loc2);
+            } else if (Math.abs(loc.x - loc2.x) === 0 && Math.abs(loc.y - loc2.y) === 1) {
+                loc.neighbors.push(loc2);
+            }
+        });
+    });
+
+    locations[locations.length - 1].isExit = true;
+
+    return locations;
 }

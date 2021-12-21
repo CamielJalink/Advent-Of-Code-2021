@@ -1,8 +1,6 @@
 export class Cave {
     name: string;
     neighbors: Cave[] = [];
-    isStart = false;
-    isEnd = false;
     isSmall = false;
     constructor(name: string) {
         this.name = name;

@@ -20,6 +20,8 @@ export interface Path {
 }
 
 export function parseInput(input: string[]) {
+    input = enhanceInput(input);
+
     const locations: Location[] = [];
 
     // Build an array of all locations
@@ -41,6 +43,27 @@ export function parseInput(input: string[]) {
     });
 
     locations[locations.length - 1].isExit = true;
-
     return locations;
+}
+
+function enhanceInput(input: string[]) {
+    const newInput: string[] = [];
+
+    for (let y = 0; y < 5; y++) {
+        input.forEach((stringRow: string) => {
+            let newStringRow = "";
+            for (let x = 0; x < 5; x++) {
+                for (const char of stringRow) {
+                    let charNum = parseInt(char) + x + y;
+                    while (charNum > 9) {
+                        charNum = charNum - 9;
+                    }
+                    newStringRow += charNum.toString();
+                }
+            }
+            newInput.push(newStringRow);
+        });
+    }
+
+    return newInput;
 }

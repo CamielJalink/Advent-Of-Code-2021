@@ -6,14 +6,15 @@ function advent() {
     const input = stringInput.split("\r\n");
 
     const packet = parseHexToBinary(input[0]);
-    console.log(parsePacket(packet, 0));
+    const versionValues: number[] = [];
+    parsePacket(packet, versionValues, -1);
+    console.log(versionValues.reduce((prev: number, next: number) => prev + next));
 }
 
-function parsePacket(packet: string, versionValue: number) {
+function parsePacket(packet: string, versionValues: number[], subPacketsUntilReturn: number) {
     // header = version and then typeId. The rest is the body.
     const version = parseInt(packet.substring(0, 3), 2);
-    versionValue += version;
-    console.log(`total version value is now: ${versionValue}`);
+    versionValues.push(version);
     const typeId = parseInt(packet.substring(3, 6), 2);
     packet = packet.substring(6);
 
@@ -32,7 +33,6 @@ function parsePacket(packet: string, versionValue: number) {
             }
         }
         const literalValue = parseInt(binaryLiteralString, 2);
-        console.log(`found a literal value: ${literalValue}`);
         packet = remainingPacket;
     }
     // else, we're an operator!
@@ -46,11 +46,11 @@ function parsePacket(packet: string, versionValue: number) {
             packet = packet.substring(15);
             const subPackets = packet.substring(0, lengthOfSubPackets);
             packet = packet.substring(lengthOfSubPackets);
-            versionValue = parsePacket(subPackets, versionValue);
+            parsePacket(subPackets, versionValues, -1);
         } else if (lengthTypeId === "1") {
             const numSubpacketsContained = parseInt(packet.substring(0, 11), 2);
-            console.log(numSubpacketsContained);
-            // subPackets = packet.substring(11);
+            packet = packet.substring(11);
+            packet = parsePacket(packet, versionValues, numSubpacketsContained);
         } else {
             console.error("This isn't allowed to happen!");
         }
@@ -59,13 +59,17 @@ function parsePacket(packet: string, versionValue: number) {
     // Als hij hier nog lengte heeft, doe het met wat overblijft,
     // als niet,
     if (packet.length > 0 && removeTrailingZeroes(packet).length > 0) {
-        console.log(`not done yet, my packet still contains: ${packet}`);
-        versionValue = parsePacket(packet, versionValue);
-    } else {
-        console.log(`I think i'm done with remaining packet: ${packet}`);
+        subPacketsUntilReturn--;
+        if (subPacketsUntilReturn > 0) {
+            packet = parsePacket(packet, versionValues, subPacketsUntilReturn);
+        } else if (subPacketsUntilReturn === 0) {
+            return packet;
+        } else {
+            packet = parsePacket(packet, versionValues, -1);
+        }
     }
 
-    return versionValue;
+    return packet;
 }
 
 advent();

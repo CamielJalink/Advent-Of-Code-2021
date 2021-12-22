@@ -58,22 +58,14 @@ export function parseHexToBinary(input: string) {
     return bitInput;
 }
 
-export function removeTrailingZeroes(binary: string) {
-    let cleanedBinary = binary;
-    for (let i = binary.length - 1; i > 0; i--) {
-        if (binary[i] === "0") {
-            cleanedBinary = binary.substring(0, i);
+export function removeTrailingZeroes(packet: string) {
+    let cleanedPacket = packet;
+    for (let i = 0; i <= packet.length; i++) {
+        if (packet[i] === "0") {
+            cleanedPacket = packet.substring(i + 1);
         } else {
             break;
         }
     }
-    return cleanedBinary;
-}
-
-export function findLiteral(body: string) {
-    let binaryLiteralString = "";
-    for (let i = 5; i <= body.length; i += 5) {
-        binaryLiteralString += body.substring(i - 4, i);
-    }
-    return parseInt(binaryLiteralString, 2);
+    return cleanedPacket;
 }

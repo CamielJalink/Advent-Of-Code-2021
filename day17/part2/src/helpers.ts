@@ -17,7 +17,7 @@ export function determineVelocities(dimensions: number[]) {
     const maxY = dimensions[2]; // I guess I mean minY, but i'm stubborn...
     const relevantVelocities: number[][] = [];
 
-    for (let y = 0; y <= Math.abs(maxY); y++) {
+    for (let y = -1 * Math.abs(maxY); y <= Math.abs(maxY); y++) {
         for (let x = 0; x <= maxX; x++) {
             relevantVelocities.push([x, y]);
         }

@@ -10,14 +10,13 @@ function advent() {
 function determineHighestY(input: string) {
     const dimensions: number[] = parseInput(input);
     const relevantVelocities: number[][] = determineVelocities(dimensions);
-    let highestY = 0;
+    let numValidVelocities = 0;
     relevantVelocities.forEach((velocity: number[]) => {
-        const testShotHighestY = testShot(velocity, dimensions);
-        if (highestY < testShotHighestY) {
-            highestY = testShotHighestY;
+        if (testShot(velocity, dimensions)) {
+            numValidVelocities++;
         }
     });
-    return highestY;
+    return numValidVelocities;
 }
 
 function testShot(velocity: number[], dimensions: number[]) {
@@ -62,11 +61,7 @@ function testShot(velocity: number[], dimensions: number[]) {
         velY--;
     }
 
-    if (shotValid) {
-        return highestY;
-    } else {
-        return 0;
-    }
+    return shotValid;
 }
 
 advent();
